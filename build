@@ -1,0 +1,25 @@
+git clone git://anongit.freedesktop.org/cairo
+git clone git://anongit.freedesktop.org/pixman
+wget sourceforge.net/projects/libpng/files/zlib/1.2.3/zlib-1.2.3.tar.gz/download
+tar zxvf zlib-1.2.3.tar.gz
+mv zlib-1.2.3 zlib
+cd zlib
+nmake -f win32/Makefile.msc
+cd ..
+wget http://prdownloads.sourceforge.net/libpng/libpng-1.6.6.tar.gz?download
+tar zxvf libpng-1.6.6.tar.gz
+mv libpng-1.6.6 libpng
+cd libpng
+nmake scripts/makefile.vcwin32
+cd ..
+cd pixman
+cp pixman/pixman-version.h.in pixman/pixman-version.h
+perl -p -i.bak -e "s/\@PIXMAN_VERSION_MAJOR\@/0/" pixman/pixman-version.h
+perl -p -i.bak -e "s/\@PIXMAN_VERSION_MINOR\@/30/" pixman/pixman-version.h
+perl -p -i.bak -e "s/\@PIXMAN_VERSION_MICRO\@/2/" pixman/pixman-version.h
+# needed for thread-test.c
+touch pixman/test/config.h
+make -f Makefile.win32
+cd ..
+cd cairo
+make -f Makefile.win32 CFG=release
